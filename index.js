@@ -32,8 +32,9 @@ app.use(session({
 
 app.use(cors({
     credentials: true,
-    origin: 'http://localhost:3000'
+    origin: process.env.CLIENT_ORIGIN || 'http://localhost:3000'
 }));
+
 app.use(express.json());
 app.use(FileUpload());
 app.use(express.static("public"));
@@ -43,6 +44,8 @@ app.use(AuthRoute);
 
 // store.sync();
 
-app.listen(process.env.APP_PORT, () => {
-    console.log('Server Up and Running...');
-});
+if (process.env.NODE_ENV !== 'production') {
+    app.listen(process.env.APP_PORT, () => {
+        console.log(`Server running on port ${process.env.APP_PORT}`);
+    });
+}
