@@ -16,6 +16,15 @@ const store = new sessionStore({
     db: db
 });
 
+// Database connection check
+(async() => {
+    try {
+        await db.authenticate();
+        console.log('Database connected...');
+    } catch (error) {
+        console.error('Database connection error:', error);
+    }
+})();
 // (async() => {
 // await db.sync();
 // })();
@@ -42,9 +51,11 @@ app.use(ProductRoute);
 app.use(UserRoute);
 app.use(AuthRoute);
 
+export default app;
 // store.sync();
 
 if (process.env.NODE_ENV !== 'production') {
+    const PORT = process.env.APP_PORT || 5000;
     app.listen(process.env.APP_PORT, () => {
         console.log(`Server running on port ${process.env.APP_PORT}`);
     });
